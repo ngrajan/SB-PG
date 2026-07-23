@@ -4,7 +4,7 @@ const roomController = require("../controllers/roomController");
 
 const router = express.Router();
 
-router.route("/room").post(roomController.createRoom).get(roomController.getAllRooms);
+router.route("/rooms").post(roomController.createRoom).get(roomController.getAllRooms);
 router
   .route("/room/:id")
   .get(roomController.getRoom)

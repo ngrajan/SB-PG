@@ -5,6 +5,7 @@ const cors = require("cors");
 const AppError = require("./utils/appError");
 // routes import
 const roomRoutes = require("./routes/roomRoutes");
+const tenantRoutes = require("./routes/tenantRoutes");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes
 app.use("/api/v1", roomRoutes);
+app.use("/api/v1", tenantRoutes);
 
 app.all("{*splat}", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

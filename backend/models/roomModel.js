@@ -28,6 +28,7 @@ const roomSchema = new mongoose.Schema(
     vacancies: {
       type: Number,
       min: [0, "Vacancies must be a positive number"],
+      default: 1
     },
   },
 

@@ -3,6 +3,8 @@ const connectDB = require("./config/mongoDB");
 const { PORT } = require("./config/env");
 
 process.on("uncaughtException", (err) => {
+  console.error(err);
+  console.error(err.stack);
   console.error(`Uncaught Exception: ${err.name} - ${err.message}`);
   process.exit(1);
 });

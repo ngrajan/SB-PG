@@ -19,7 +19,7 @@ const tenantSchema = new mongoose.Schema({
   },
   addressProofType: {
     type: String,
-    enum: ["Aadhar", "Voter ID", "Passport", "Driving License"],
+    // enum: ["Aadhar", "Voter ID", "Passport", "Driving License"],
     required: true,
   },
   addressProofImage: {
