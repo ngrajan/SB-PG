@@ -45,7 +45,7 @@ const tenantSchema = new mongoose.Schema({
   },
 });
 
-tenantSchema.pre("validate", function (next) {
+tenantSchema.pre("validate", function () {
   if (this.stayPeriod && this.stayPeriod.from && this.stayPeriod.to) {
     if (this.stayPeriod.to <= this.stayPeriod.from) {
       this.invalidate(

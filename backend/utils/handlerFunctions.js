@@ -6,6 +6,8 @@ exports.getAll = (Model) =>
     // API filters are yet to implement
     const docs = await Model.find();
 
+    if (!docs) return next(new AppError("No doucments found", 404));
+
     res.status(200).json({
       status: "success",
       data: docs,
@@ -30,7 +32,7 @@ exports.getOne = (Model, popOptions) =>
   });
 
 exports.createOne = (Model) =>
-  catchAsync(async (req, res, next) => {
+  catchAsync(async (req, res) => {
     const doc = await Model.create(req.body);
 
     res.status(201).json({

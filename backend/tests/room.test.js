@@ -150,7 +150,6 @@ it("should delete a room", async () => {
 
   // Assert - HTTP response
   expect(response.status).toBe(204);
-  console.log("responseBody", response.body);
 
   // Assert - API & DB response
   expect(response.body.data).toEqual(undefined);
