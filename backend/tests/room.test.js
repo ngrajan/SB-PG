@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../app");
 const Room = require("../models/roomModel");
 
-it("should create a new roow", async () => {
+it("should create a new room", async () => {
   // Arrange
   const roomData = {
     roomNumber: "101",
@@ -12,7 +12,7 @@ it("should create a new roow", async () => {
     vacancies: 0,
   };
   // Act
-  const response = await request(app).post("/api/v1/room").send(roomData);
+  const response = await request(app).post("/api/v1/rooms").send(roomData);
   // Assert
   expect(response.status).toBe(201);
 
@@ -51,7 +51,7 @@ it("should get all the rooms", async () => {
   await Room.create(room1);
   await Room.create(room2);
   // Act
-  const response = await request(app).get("/api/v1/room");
+  const response = await request(app).get("/api/v1/rooms");
   // Assert
   expect(response.status).toBe(200);
 
