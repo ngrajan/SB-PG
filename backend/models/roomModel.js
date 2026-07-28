@@ -7,9 +7,10 @@ const roomSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    roomMedia: [{ type: String, required: true }],
     share: {
       type: Number,
-      min: [2, "Share must be at least 2"],
+      min: [1, "Share must be atleast 1"],
       max: [4, "Share cannot exceed 4"],
       required: true,
     },
@@ -25,30 +26,26 @@ const roomSchema = new mongoose.Schema(
       max: [10000, "Price cannot exceed 10000"],
       required: true,
     },
-    vacancies: {
-      type: Number,
-      min: [0, "Vacancies must be a positive number"],
-      default: 1
-    },
   },
-
-  //   {
-  //     toJSON: { virtuals: true },
-  //     toObject: { virtuals: true },
-  //   },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 );
 
 // calculates the vacancies virtually
-// roomSchema.virtual("vacancies").get(function () {
-//   return (this.share || 0) - (this.tenants ? this.tenants.length : 0);
-// });
+roomSchema.virtual("vacancies").get(function () {
+  return this.share - this.tenants.length;
+});
+
+roomSchema.path("tenants").validate(function (tenants) {
+  return tenants.length <= this.share;
+}, "Number of tenants cannot exceed the share capacity");
 
 // pre-computing the vacancies before saving the room document
-roomSchema.pre("save", function () {
-  if (this.vacancies === undefined || this.vacancies === null) {
-    this.vacancies = (this.share || 0) - (this.tenants ? this.tenants.length : 0);
-  }
-  // next();
-});
+// roomSchema.pre("save", function (next) {
+//   this.vacancies = this.share - this.tenants.length;
+//   next();
+// });
 
 module.exports = mongoose.model("Room", roomSchema);

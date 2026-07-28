@@ -33,7 +33,7 @@ exports.getOne = (Model, popOptions) =>
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res) => {
-    console.log(req.body);
+    console.log("from create handler", req.body);
     const doc = await Model.create(req.body);
 
     res.status(201).json({

@@ -1,6 +1,6 @@
-const app = require("./app");
-const connectDB = require("./config/mongoDB");
 const { PORT } = require("./config/env");
+const connectDB = require("./config/mongoDB");
+const app = require("./app");
 
 process.on("uncaughtException", (err) => {
   console.error(err);

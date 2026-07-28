@@ -4,8 +4,9 @@ const AppError = require("../utils/appError");
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) return cb(null, true);
-  cb(new AppError("Invalid image type", 400), false);
+  if (file.mimetype.startsWith("image/") || file.mimetype.startsWith("video/"))
+    return cb(null, true);
+  cb(new AppError("Invalid media type", 400), false);
 };
 
 const upload = multer({

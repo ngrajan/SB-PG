@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs/promises");
 const sharp = require("sharp");
-const catchAsync = require("./catchAsync");
+const catchAsync = require("../utils/catchAsync");
 
 exports.resizeImage = (field, folder, prefix) =>
   catchAsync(async (req, res, next) => {
