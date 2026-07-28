@@ -5,23 +5,42 @@ const catchAsync = require("../utils/catchAsync");
 
 exports.resizeImage = (field, folder, prefix) =>
   catchAsync(async (req, res, next) => {
-    const file = req.files?.[field]?.[0];
+    let files = [];
 
-    if (!file) return next();
+    if (req.file) {
+      files = [req.file];
+    } else if (Array.isArray(req.files)) {
+      files = req.files;
+    } else if (req.files?.[field]) {
+      files = req.files[field];
+    }
 
-    file.filename = `${prefix}-${Date.now()}.jpeg`; // should work on unique filename(duplicate can be possible because two users upload photos on same time)
+    if (!files.length) return next();
 
     const uploadDir = path.join(__dirname, "..", "uploads", folder);
 
     await fs.mkdir(uploadDir, { recursive: true });
 
-    await sharp(file.buffer)
-      .resize(500, 500)
-      .toFormat("jpeg")
-      .jpeg({ quality: 90 })
-      .toFile(path.join(uploadDir, file.filename));
+    const filenames = [];
 
-    req.body[field] = file.filename;
+    for (const file of files) {
+      file.filename = `${prefix}-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2, 8)}.jpeg`;
+
+      await sharp(file.buffer)
+        .resize(500, 500)
+        .jpeg({ quality: 90 })
+        .toFile(path.join(uploadDir, file.filename));
+
+      filenames.push(file.filename);
+    }
+
+    if (files.length === 1) {
+      req.body[field] = filenames[0];
+    } else {
+      req.body[field] = filenames;
+    }
 
     next();
   });
