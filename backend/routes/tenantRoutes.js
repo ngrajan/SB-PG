@@ -2,7 +2,7 @@ const express = require("express");
 
 const tenantController = require("../controllers/tenantController");
 const uploadImage = require("../middlewares/imageUpload");
-const imageProcessor = require("../middlewares/imageProcessor");
+const imageProcessor = require("../middlewares/imageMiddleware");
 
 const router = express.Router();
 

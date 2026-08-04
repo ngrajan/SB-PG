@@ -24,6 +24,7 @@ exports.resizeImage = (field, folder, prefix) =>
     const filenames = [];
 
     for (const file of files) {
+      const mediaType = file.mimetype.split("/")[0];
       file.filename = `${prefix}-${Date.now()}-${Math.random()
         .toString(36)
         .slice(2, 8)}.jpeg`;
@@ -33,7 +34,7 @@ exports.resizeImage = (field, folder, prefix) =>
         .jpeg({ quality: 90 })
         .toFile(path.join(uploadDir, file.filename));
 
-      filenames.push(file.filename);
+      filenames.push({ type: mediaType, filename: file.filename });
     }
 
     if (files.length === 1) {

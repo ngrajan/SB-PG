@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const MediaSchema = require("./mediaModel");
 
 const tenantSchema = new mongoose.Schema({
   firstName: {
@@ -13,18 +14,13 @@ const tenantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  tenantImage: {
-    type: String,
-    required: true,
-  },
+  tenantImage: MediaSchema,
   addressProofType: {
     type: String,
     // enum: ["Aadhar", "Voter ID", "Passport", "Driving License"],
     required: true,
   },
-  addressProofImage: {
-    type: String,
-  },
+  addressProofImage: MediaSchema,
   roomNumber: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Room",

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const MediaSchema = require("./mediaModel");
 
 const roomSchema = new mongoose.Schema(
   {
@@ -7,7 +8,7 @@ const roomSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    roomMedia: [{ type: String, required: true }],
+    roomMedia: [MediaSchema],
     share: {
       type: Number,
       min: [1, "Share must be atleast 1"],

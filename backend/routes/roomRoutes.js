@@ -2,15 +2,14 @@ const express = require("express");
 
 const roomController = require("../controllers/roomController");
 const uploadMedia = require("../middlewares/imageUpload");
-const imageOptimizer = require("../middlewares/imageProcessor");
-
+const mediaProcessor = require("../middlewares/mediaProcessor");
 const router = express.Router();
 
 router
   .route("/rooms")
   .post(
     uploadMedia.uploadMultiple("roomMedia", 3),
-    imageOptimizer.resizeImage("roomMedia", "rooms", "room"),
+    mediaProcessor.processMedia("roomMedia", "rooms", "room"),
     roomController.createRoom,
   )
   .get(roomController.getAllRooms);
