@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const catchAsync = require("./catchAsync");
 const AppError = require("./appError");
 
@@ -39,6 +40,37 @@ exports.createOne = (Model) =>
       status: "success",
       data: doc,
     });
+  });
+
+exports.refCreateOne = (Model, refModel, refField, updateField) =>
+  catchAsync(async (req, res) => {
+    const session = await mongoose.startSession();
+
+    try {
+      session.startTransaction();
+
+      const [doc] = await Model.create([req.body], { session });
+
+      await refModel.findByIdAndUpdate(
+        req.body[refField],
+        {
+          $push: { [updateField]: doc._id },
+        },
+        { session },
+      );
+
+      await session.commitTransaction();
+
+      res.status(201).json({
+        status: "success",
+        data: doc,
+      });
+    } catch (err) {
+      await session.abortTransaction();
+      throw err;
+    } finally {
+      await session.endSession();
+    }
   });
 
 exports.updateOne = (Model) =>
@@ -93,4 +125,33 @@ exports.deleteOne = (Model) =>
       status: "success",
       data: null,
     });
+  });
+
+exports.refDeleteOne = (Model, refModel, refField, updateField) =>
+  catchAsync(async (req, res) => {
+    const session = await mongoose.startSession();
+    try {
+      await session.startTransaction();
+
+      const doc = await Model.findOne({ _id: req.params.id }).session(session);
+
+      await Model.findByIdAndDelete(req.params.id, { session });
+
+      await refModel.findByIdAndUpdate(
+        doc[refField],
+        {
+          $pull: { [updateField]: req.params.id },
+        },
+        { session },
+      );
+
+      await session.commitTransaction();
+
+      res.status(204).json({ status: "success", data: null });
+    } catch (err) {
+      await session.abortTransaction();
+      throw err;
+    } finally {
+      session.endSession();
+    }
   });

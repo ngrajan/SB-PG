@@ -6,18 +6,38 @@ const imageProcessor = require("../middlewares/imageMiddleware");
 
 const router = express.Router();
 
-router.route("/tenants").post(
-  uploadImage.uploadFields([
-    { name: "tenantImage", maxCount: 1 },
-    { name: "addressProofImage", maxCount: 1 },
-  ]),
-  imageProcessor.resizeImage("tenantImage", "tenants", "tenant"),
-  imageProcessor.resizeImage(
-    "addressProofImage",
-    "addressProofs",
-    "address-proof",
-  ),
-  tenantController.createTenant,
-);
+router
+  .route("/tenants")
+  .post(
+    uploadImage.uploadFields([
+      { name: "tenantImage", maxCount: 1 },
+      { name: "addressProofImage", maxCount: 1 },
+    ]),
+    imageProcessor.resizeImage("tenantImage", "tenants", "tenant"),
+    imageProcessor.resizeImage(
+      "addressProofImage",
+      "addressProofs",
+      "address-proof",
+    ),
+    tenantController.createTenant,
+  )
+  .get(tenantController.getAllTenants);
+
+router
+  .route("/tenant/:id")
+  .get(tenantController.getTenant)
+  .patch(
+    uploadImage.uploadFields([
+      { name: "tenantImage", maxCount: 1 },
+      { name: "addressProofImage", maxCount: 1 },
+    ]),
+    imageProcessor.resizeImage("tenantImage", "tenants", "tenant"),
+    imageProcessor.resizeImage(
+      "addressProofImage",
+      "addressProofs",
+      "addressProof",
+    ), tenantController.patchTenant
+  )
+  .delete(tenantController.deleteTenant);
 
 module.exports = router;

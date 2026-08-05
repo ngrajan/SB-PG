@@ -16,7 +16,11 @@ router
 router
   .route("/room/:id")
   .get(roomController.getRoom)
-  .patch(roomController.patchRoom)
+  .patch(
+    uploadMedia.uploadMultiple("roomMedia", 3),
+    mediaProcessor.processMedia("roomMedia", "rooms", "room"),
+    roomController.patchRoom,
+  )
   .put(roomController.updateRoom)
   .delete(roomController.deleteRoom);
 
